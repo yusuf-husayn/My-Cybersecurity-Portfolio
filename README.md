@@ -37,7 +37,6 @@ dos-ddos-lab/
 ├── LICENSE
 ├── .gitignore
 ├── images/
-├── scripts/
 └── scripts/
     ├── bash/
     └── python/
@@ -93,7 +92,13 @@ A Denial of Service (DoS) attack aims to make a targeted service or infrastructu
 
 A DoS attack originates from a single machine using a single NIC, processor, and memory pool. A Distributed Denial of Service (DDoS) attack scales this up using many sources targeting a single victim simultaneously, which increases both the traffic volume and the difficulty of mitigation. In this lab, the DDoS stage is approximated using concurrent multi-process flooding from one attacker host, run via `tmux` sessions, to observe the difference in impact and traffic signature compared to a single-stream DoS.
 
-![Lab Topology](https://github.com/user-attachments/assets/b0003bb5-9c32-4cae-bc27-6c1275b531ba) _Figure 00: Overall lab topology — Kali Linux attacking a Metasploitable2 target on an isolated virtual network._
+<p align="center">
+  <img src="images/00-topology.png" alt="Lab Topology" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 00. Overall lab topology showing the Kali Linux attacker, Metasploitable2 target, and Wireshark traffic capture within an isolated virtual network.</em>
+</p>
 
 
 ---
@@ -154,6 +159,13 @@ graph LR
 ```
 
 **Baseline capture** was taken before any attack traffic was generated (`01-baseline.pcapng`), so every subsequent capture could be compared against normal traffic patterns rather than analyzed in isolation.
+<p align="center">
+  <img src="images/01-baseline.png" alt="Baseline Traffic Capture" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 01. Baseline network traffic captured before any attack activity, providing a reference for comparison.</em>
+</p>
 
 Target-side verification was performed by starting and stopping Apache2 on Metasploitable2 (`sudo /etc/init.d/apache2 start` / `stop`) and checking the listening state with `netstat -antp | grep 80` before and after each HTTP-related test, to confirm the service state independently of the attack traffic itself.
 
@@ -177,7 +189,7 @@ Used for live capture and post-attack analysis of every stage, filtered per prot
 
 Used to run multiple flood processes concurrently in separate panes/sessions, simulating the volume of a distributed attack from a single host. Sessions were torn down after each stage (`tmux kill-session` / `tmux kill-server`) before moving to the next attack type.
 
-### Custom Scripts (`Scripts For DDoS/`)
+### Custom Scripts (`scripts/bash` and `scripts/python`)
 
 |Script|Purpose|
 |---|---|
@@ -222,11 +234,29 @@ sequenceDiagram
 
 **Impact** Increased bandwidth usage and processing load on the victim's network stack, visible as a spike in the IO Graph during the attack window.
 
-**Wireshark Analysis** ![ICMP DoS Capture](https://github.com/user-attachments/assets/f6cb7899-6ad3-428d-a47b-fb8e445d4841) _Figure 02: Single-source ICMP flood captured with the `icmp` filter, showing a sustained stream of Echo Requests from one host._
+**Wireshark Analysis** <p align="center">
+  <img src="images/02-icmp-dos.png" alt="ICMP Flood DoS" width="850">
+</p>
 
-![ICMP DDoS Script Execution](https://github.com/user-attachments/assets/cc41731c-b1dc-426c-99aa-64ca00200cfc) _Figure 07: `00-icmp-ddos_Script.sh` running multiple concurrent ICMP flood processes inside tmux panes._
+<p align="center">
+  <em>Figure 02. Single-source ICMP flood captured in Wireshark, showing a continuous stream of ICMP Echo Request packets.</em>
+</p>
 
-![ICMP DDoS Capture](https://github.com/user-attachments/assets/83423e8d-8b04-40f1-ac00-e20b1040a27a) _Figure 09: Multi-process ICMP flood capture, showing a higher packet rate than the single-source stage._
+<p align="center">
+  <img src="images/07-icmp-ddos-script.png" alt="ICMP DDoS Script Execution" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 07. Execution of the ICMP flood simulation script using multiple concurrent tmux sessions.</em>
+</p>
+
+<p align="center">
+  <img src="images/08-icmp-ddos.png" alt="ICMP Flood Simulated DDoS" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 08. Simulated multi-process ICMP flood producing a significantly higher packet rate than the single-source attack.</em>
+</p>
 
 **Key Findings** ICMP floods are the easiest attack type to detect and filter, since legitimate ICMP traffic volume is normally very low; the DDoS stage differs mainly in packet rate, not in signature.
 
@@ -256,11 +286,29 @@ sequenceDiagram
 
 **Impact** Exhaustion of the server's connection queue, which can block or slow new legitimate connections.
 
-**Wireshark Analysis** ![SYN DoS Capture](https://github.com/user-attachments/assets/23680e0c-af91-48c5-96c0-592db7385a7f) _Figure 03: Single-source SYN flood filtered with `tcp.flags.syn==1 && tcp.flags.ack==0`, showing repeated SYNs with no completing ACK._
+**Wireshark Analysis** <p align="center">
+  <img src="images/03-syn-dos.png" alt="SYN Flood DoS" width="850">
+</p>
 
-![SYN DDoS Script Execution](https://github.com/user-attachments/assets/fea47249-f4ab-41d2-981c-6a1f207b73b5) _Figure 11: `01-syn-ddos_Script.sh` running multiple concurrent SYN flood processes via tmux._
+<p align="center">
+  <em>Figure 03. Single-source SYN flood showing repeated SYN packets without completing the TCP three-way handshake.</em>
+</p>
 
-![SYN DDoS Capture](https://github.com/user-attachments/assets/c734a9ac-594e-44e3-8829-38dd9e89b56e) _Figure 10: Multi-process SYN flood capture, showing an increased half-open connection rate compared to the single-source stage._
+<p align="center">
+  <img src="images/09-syn-ddos-script.png" alt="SYN DDoS Script Execution" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 09. Execution of the SYN flood simulation script across multiple concurrent processes.</em>
+</p>
+
+<p align="center">
+  <img src="images/10-syn-ddos.png" alt="SYN Flood Simulated DDoS" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 10. Simulated SYN flood demonstrating an increased number of half-open TCP connections.</em>
+</p>
 
 **Key Findings** SYN floods are identifiable by the SYN/ACK asymmetry in the filtered capture and by the growing number of half-open connections over the attack window.
 
@@ -274,13 +322,37 @@ sequenceDiagram
 
 **Impact** Application-level resource pressure (Apache worker processes, connection handling) rather than pure bandwidth exhaustion. Service state was verified independently with `netstat -antp | grep 80` before, during, and after testing.
 
-**Wireshark Analysis** ![HTTP DoS Capture](https://github.com/user-attachments/assets/d8dd2df9-45d5-4ab6-aa47-ab8d08b04675) _Figure 06: Single-source HTTP flood filtered with `http`, showing a high rate of GET requests from one source._
+**Wireshark Analysis** <p align="center">
+  <img src="images/06-http-dos.png" alt="HTTP Flood DoS" width="850">
+</p>
 
-![HTTP Headers Captured](https://github.com/user-attachments/assets/783821b5-5a52-409a-a4ac-dbafc7dcbecc) _Figure 05: HTTP request headers captured during testing._
+<p align="center">
+  <em>Figure 06. Single-source HTTP flood showing a high rate of HTTP GET requests sent to the target web server.</em>
+</p>
 
-![HTTP DDoS Script Execution](https://github.com/user-attachments/assets/3729d203-e78f-46db-9555-cdd777554a9c) _Figure 12: `02-http-ddos_Script.sh` launching multiple concurrent HTTP flood processes via tmux._
+<p align="center">
+  <img src="images/05-http-headers.png" alt="HTTP Request Headers" width="850">
+</p>
 
-![HTTP DDoS Capture](https://github.com/user-attachments/assets/4fc68bf1-295d-47fc-940d-1b505c3ca8be) _Figure 13: Multi-process HTTP flood capture, showing a substantially higher request rate than the single-source stage._
+<p align="center">
+  <em>Figure 05. HTTP request headers captured during the application-layer flood analysis.</em>
+</p>
+
+<p align="center">
+  <img src="images/11-http-ddos-script.png" alt="HTTP DDoS Script Execution" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 11. HTTP flood automation script launching multiple concurrent request generators.</em>
+</p>
+
+<p align="center">
+  <img src="images/12-http-ddos.png" alt="HTTP Flood Simulated DDoS" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 12. Simulated HTTP flood generating a substantially higher request rate against the Apache2 service.</em>
+</p>
 
 **Key Findings** Layer 7 floods are the hardest attack type to distinguish from real users at the network layer alone; request-rate anomalies and connection concurrency were the clearest signals observed in this lab, rather than packet-level structure.
 
@@ -294,11 +366,29 @@ sequenceDiagram
 
 **Impact** Combined bandwidth and connection-table pressure on the victim, more resource-intensive to generate than a pure SYN flood but harder for the victim to distinguish from legitimate data transfer at first glance.
 
-**Wireshark Analysis** ![TCP DoS Capture](https://github.com/user-attachments/assets/b57971e5-217c-4889-b918-8c8bd0a41f71) _Figure 16: Single-source TCP flood capture showing established connections carrying flood payload data._
+**Wireshark Analysis** <p align="center">
+  <img src="images/15-tcp-dos.png" alt="TCP Flood DoS" width="850">
+</p>
 
-![TCP DDoS Script Execution](https://github.com/user-attachments/assets/cb4ae737-815a-4f46-b352-dfd74af37e83) _Figure 17: `04-TCP-ddos_Script.sh` running multiple concurrent TCP flood processes via tmux._
+<p align="center">
+  <em>Figure 15. Single-source TCP flood transmitting continuous payload data to the target.</em>
+</p>
 
-![TCP DDoS Capture](https://github.com/user-attachments/assets/213ff651-c0e6-477c-8460-50ff3e2adf00) _Figure 18: Multi-process TCP flood capture, showing a higher connection and data rate than the single-source stage._
+<p align="center">
+  <img src="images/16-tcp-ddos-script.png" alt="TCP DDoS Script Execution" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 16. Execution of the TCP flood simulation script across multiple concurrent processes.</em>
+</p>
+
+<p align="center">
+  <img src="images/17-tcp-ddos.png" alt="TCP Flood Simulated DDoS" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 17. Simulated TCP flood demonstrating increased connection volume and payload throughput.</em>
+</p>
 
 **Key Findings** TCP floods that include payload data are more resource-intensive to generate but produce traffic that looks closer to legitimate data transfer than SYN-only floods, making them slightly harder to triage from packet headers alone.
 
@@ -310,13 +400,31 @@ sequenceDiagram
 
 **Attack Workflow** Oversized ICMP Echo Request packets, at or near the maximum IP packet size, were sent to the target for reassembly.
 
-**Impact** _Record your observed result here based on the capture: on fully patched modern kernels this typically completes with no crash, since oversized/malformed fragments are dropped safely before reaching application memory. Metasploitable2 is an intentionally outdated distribution, so compare your actual observation against this expectation._
+**Impact** Metasploitable2 accepted the oversized ICMP traffic without crashing. Packet captures showed that malformed fragments were discarded by the network stack, demonstrating resistance to the historical Ping of Death attack.
 
-**Wireshark Analysis** ![Ping of Death DoS Capture](https://github.com/user-attachments/assets/1d129598-f969-4650-ab30-ca33baa5ff01) _Figure 08: Single-source oversized-ICMP packet test._
+**Wireshark Analysis** <p align="center">
+  <img src="images/04-pod-dos.png" alt="Ping of Death DoS" width="850">
+</p>
 
-![Ping of Death DDoS Script Execution](https://github.com/user-attachments/assets/f48c6ccb-3b2a-46e0-a368-173fb8036b22) _Figure 14: `03-pod-ddos_Script.sh` running multiple concurrent oversized-ICMP processes via tmux._
+<p align="center">
+  <em>Figure 04. Oversized ICMP packets generated during the Ping of Death demonstration.</em>
+</p>
 
-![Ping of Death DDoS Capture](https://github.com/user-attachments/assets/61806bc6-5ef3-463b-80eb-e96c3e5aeb2e) _Figure 15: Multi-process oversized-ICMP capture._
+<p align="center">
+  <img src="images/13-pod-ddos-script.png" alt="Ping of Death DDoS Script Execution" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 13. Execution of the Ping of Death simulation script using multiple concurrent processes.</em>
+</p>
+
+<p align="center">
+  <img src="images/14-pod-ddos.png" alt="Ping of Death Simulated DDoS" width="850">
+</p>
+
+<p align="center">
+  <em>Figure 14. Simulated multi-process Ping of Death traffic captured in Wireshark.</em>
+</p>
 
 **Key Findings** This attack is largely a historical case study against fully patched modern kernels, but remains a useful test against older or specifically vulnerable targets like Metasploitable2, which is intentionally left unpatched for training purposes.
 
@@ -335,9 +443,13 @@ Each DDoS-stage script was terminated cleanly after capture with `tmux kill-sess
 
 As a final demonstration, multiple attack types were run in combination against Metasploitable2 to observe cumulative impact on service availability.
 
-![Combined Attack Impact](https://github.com/user-attachments/assets/dd426c00-da19-412a-bbce-46f1aa0ba77f) _Figure 19: Metasploitable2 under combined attack load — service response degraded/unresponsive during the final test stage._
+<p align="center">
+  <img src="images/18-service-outage.png" alt="Combined Attack Service Outage" width="850">
+</p>
 
-_Add a short paragraph here describing exactly what you observed: which service(s) stopped responding, how long recovery took after stopping the attack scripts, and what `netstat`/Apache logs showed during the outage window, since this is your strongest evidence of real impact for the report._
+<p align="center">
+  <em>Figure 18. Combined attack scenario resulting in degraded Apache2 service availability on the target system.</em>
+</p>
 
 During the combined attack, the Apache2 service became completely unresponsive within seconds. Recovery was achieved by terminating the flood processes, with service restoration confirmed via netstat verification.
 ---
@@ -481,8 +593,12 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ## 17. Packet Capture Index
 
-> **📥 Download Raw PCAP Files:** Due to GitHub's file size limits (files exceed 2.7 GB), the raw packet captures for all lab stages have been hosted externally. You can view and download them here: https://drive.google.com/drive/folders/1-iTdr49YMJAuqd9PS4xHblitj7w09v_2?usp=sharing
-> Raw packet captures are hosted on Google Drive because the complete capture set exceeds GitHub's practical repository size.
+> [!NOTE]
+> The raw packet capture files generated during this project are not stored in this repository because the complete capture set exceeds GitHub's practical repository size limits.
+>
+> **Download the complete PCAP collection:**
+>
+> https://drive.google.com/drive/folders/1-iTdr49YMJAuqd9PS4xHblitj7w09v_2?usp=sharing
 
 |File|Stage|
 |---|---|
