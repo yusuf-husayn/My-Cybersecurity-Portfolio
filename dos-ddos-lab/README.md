@@ -506,9 +506,13 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 
 ## 19. References
 
-- OWASP Testing Guide — Denial of Service Methodology
-- Cloudflare Learning Center — Layer 7 vs Layer 4 Mitigation
-- CISA Security Guidance — Defending Against Volumetric Distributed Attacks
-- Wireshark Documentation
-- Metasploitable2 Documentation
-- hping3 Manual (`man hping3`)
+- [OWASP Testing Guide — Denial of Service Methodology](https://owasp.org/www-community/attacks/Denial_of_Service)
+- [Cloudflare Learning Center — Layer 7 vs Layer 4 Mitigation](https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/)
+- [Imperva Distributed Denial of Service (DDoS)](https://www.imperva.com/learn/ddos/denial-of-service/)
+- [Wireshark Documentation](https://www.wireshark.org/docs/)
+- [Metasploitable2 Documentation](https://docs.rapid7.com/metasploit/metasploitable-2-exploitability-guide/)
+- [hping3 Manual (`man hping3`)](https://linux.die.net/man/8/hping3)
+- [How to Perform a DDoS Attack Using Kali Linux | Educational Tutorial](https://youtu.be/mGAd_bOri18?si=hn5R2VOMuFT4JIt8)
+- [DDoS Attack Explained | How to Perform DOS Attack | Ethical Hacking and Penetration Testing](https://youtu.be/04M8X-im3ac?si=e8yiqXIU-xPyy2nE)
+- [How to Install Metasploitable on New VMware Workstation](https://youtu.be/OO7BPfi3DbU?si=OQJc4CRLsBHsmi2X)
+- [i bought a DDoS attack on the DARK WEB (don't do this)](https://youtu.be/eZYtnzODpW4?si=GXrN3MXsielkWkGg)
