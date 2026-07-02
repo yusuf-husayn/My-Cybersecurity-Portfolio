@@ -2,8 +2,8 @@
 
 Traffic Analysis • Wireshark • hping3 • Bash & Python Automation • TCP/IP
 
-![Platform](https://img.shields.io/badge/Platform-Linux-blue) ![Wireshark](https://img.shields.io/badge/Wireshark-Traffic%20Analysis-blue) ![hping3](https://img.shields.io/badge/hping3-Traffic%20Generation-orange) ![License](https://img.shields.io/badge/License-MIT-green)
-
+![Platform](https://img.shields.io/badge/Platform-Linux-blue) ![Wireshark](https://img.shields.io/badge/Wireshark-Traffic%20Analysis-blue) ![hping3](https://img.shields.io/badge/hping3-Traffic%20Generation-orange) ![License](https://img.shields.io/badge/License-MIT-green) ![GitHub](https://img.shields.io/badge/GitHub-Portfolio-black?logo=github) ![VMware](https://img.shields.io/badge/VMware-Lab-blue?logo=vmware)
+ 
 ---
 ## Information
 
@@ -11,9 +11,9 @@ Traffic Analysis • Wireshark • hping3 • Bash & Python Automation • TCP/I
 | ---------- | -------------------------------------------------------------- |
 | Topic      | Denial of Service (DoS) & Distributed Denial of Service (DDoS) |
 | Platform   | Personal Lab/RootX                                             |
-| Difficulty | Hard                                                           |
+| Difficulty | Intermediate to Advanced                                       |
 | Author     | Yusuf Muhammad Husayn Ramadan                                  |
-| Date       | 02/07/2026                                                     |
+| Date       | July 2, 2026                                                   |
 
 ## Objective
 
@@ -121,14 +121,22 @@ A DoS attack originates from a single machine using a single NIC, processor, and
 
 **Network**
 
-- Isolated virtual lab segment, host-only / NAT network with no internet-facing hosts
+- VMware virtual networking using NAT and Host-Only adapters.
 
 ### Addressing
 
+The Kali Linux attacker VM was configured with a NAT network adapter for internet access and package management. The Metasploitable2 target VM was connected to an isolated host-only network for the attack demonstrations.
+
 |Device|IP Address|
 |---|---|
-|Kali Linux (Attacker)|192.168.12.128|
-|Metasploitable2 (Victim)|192.168.1.25|
+|Kali Linux (Attacker)|192.168.12.128 (NAT)|
+|Metasploitable2 (Victim)|192.168.1.25 (Host-Only)|
+
+The virtual machines were configured using VMware virtual networking. Despite using different virtual adapters, connectivity between the attacker and target was verified before each test using ICMP and service checks.
+
+### Network Notes
+
+The lab was conducted inside VMware using isolated virtual networking. The attacker and target virtual machines were configured to communicate over the virtual network while remaining isolated from external systems.
 
 ---
 
@@ -193,14 +201,15 @@ Used to run multiple flood processes concurrently in separate panes/sessions, si
 
 |Script|Purpose|
 |---|---|
-|`00-icmp-ddos_Script.sh`|Launches multiple concurrent ICMP flood processes via tmux to simulate distributed ICMP flood volume|
-|`01-syn-ddos_Script.sh`|Launches multiple concurrent SYN flood processes via tmux to simulate distributed SYN flood volume|
-|`02-http-ddos_Script.sh`|Launches multiple concurrent HTTP flood processes via tmux to simulate distributed HTTP flood volume|
-|`03-pod-ddos_Script.sh`|Launches multiple concurrent oversized-ICMP (Ping of Death style) processes via tmux|
-|`04-TCP-ddos_Script.sh`|Launches multiple concurrent TCP flood processes via tmux|
-|`05-http-ddos.py`|Python-based HTTP request generator used by the HTTP DDoS script|
-|`botnet.py`|Python script coordinating multiple local flood processes to simulate a distributed source pattern against a single target|
-|`TCP_Data-Flood.py`|Python-based TCP payload flood generator|
+|`00-icmp-ddos-script.sh`|Launches multiple concurrent ICMP flood processes via tmux to simulate distributed ICMP flood volume|
+|`01-syn-ddos-script.sh`|Launches multiple concurrent SYN flood processes via tmux to simulate distributed SYN flood volume|
+|`02-http-ddos-script.sh`|Launches multiple concurrent HTTP flood processes via tmux to simulate distributed HTTP flood volume|
+|`03-pod-ddos-script.sh`|Launches multiple concurrent oversized-ICMP (Ping of Death style) processes via tmux|
+|`04-tcp-ddos-script.sh`|Launches multiple concurrent TCP flood processes via tmux|
+|`00-tcp-data-flood.py`|Python-based TCP payload flood generator|
+|`01-botnet.py`|Python script coordinating multiple local flood processes to simulate a distributed source pattern against a single target|
+|`02-http-ddos.py`|Python-based HTTP request generator used by the HTTP DDoS script|
+
 
 > Script contents are not reproduced in this write-up; only their role in the lab workflow is documented, consistent with responsible disclosure practice for offensive tooling.
 
@@ -243,19 +252,19 @@ sequenceDiagram
 </p>
 
 <p align="center">
-  <img src="images/06-icmp-ddos_Script.png" alt="ICMP DDoS Script Execution" width="850">
+  <img src="images/03-icmp-ddos-script.png" alt="ICMP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 07. Execution of the ICMP flood simulation script using multiple concurrent tmux sessions.</em>
+  <em>Figure 03. Execution of the ICMP flood simulation script using multiple concurrent tmux sessions.</em>
 </p>
 
 <p align="center">
-  <img src="images/08-icmp-ddos.png" alt="ICMP Flood Simulated DDoS" width="850">
+  <img src="images/04-icmp-ddos.png" alt="ICMP Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 08. Simulated multi-process ICMP flood producing a significantly higher packet rate than the single-source attack.</em>
+  <em>Figure 04. Simulated multi-process ICMP flood producing a significantly higher packet rate than the single-source attack.</em>
 </p>
 
 **Key Findings** ICMP floods are the easiest attack type to detect and filter, since legitimate ICMP traffic volume is normally very low; the DDoS stage differs mainly in packet rate, not in signature.
@@ -287,27 +296,27 @@ sequenceDiagram
 **Impact** Exhaustion of the server's connection queue, which can block or slow new legitimate connections.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/03-syn-dos.png" alt="SYN Flood DoS" width="850">
+  <img src="images/05-syn-dos.png" alt="SYN Flood DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 03. Single-source SYN flood showing repeated SYN packets without completing the TCP three-way handshake.</em>
+  <em>Figure 05. Single-source SYN flood showing repeated SYN packets without completing the TCP three-way handshake.</em>
 </p>
 
 <p align="center">
-  <img src="images/10-syn-ddos_Script.png" alt="SYN DDoS Script Execution" width="850">
+  <img src="images/06-syn-ddos-script.png" alt="SYN DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 10. Execution of the SYN flood simulation script across multiple concurrent processes.</em>
+  <em>Figure 06. Execution of the SYN flood simulation script across multiple concurrent processes.</em>
 </p>
 
 <p align="center">
-  <img src="images/09-syn-ddos.png" alt="SYN Flood Simulated DDoS" width="850">
+  <img src="images/07-syn-ddos.png" alt="SYN Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 09. Simulated SYN flood demonstrating an increased number of half-open TCP connections.</em>
+  <em>Figure 07. Simulated SYN flood demonstrating an increased number of half-open TCP connections.</em>
 </p>
 
 **Key Findings** SYN floods are identifiable by the SYN/ACK asymmetry in the filtered capture and by the growing number of half-open connections over the attack window.
@@ -318,40 +327,40 @@ sequenceDiagram
 
 **Overview** Targets the application layer (Layer 7) with structurally valid HTTP requests against the Apache2 service running on Metasploitable2. These requests are indistinguishable from legitimate traffic at the network layer, since the goal is to exhaust application-side resources rather than raw bandwidth.
 
-**Attack Workflow** Repeated HTTP GET requests are sent to the target's web service. The Python-based generator (`05-http-ddos.py`) issues requests concurrently across multiple processes during the DDoS stage.
+**Attack Workflow** Repeated HTTP GET requests are sent to the target's web service. The Python-based generator (`02-http-ddos.py`) issues requests concurrently across multiple processes during the DDoS stage.
 
 **Impact** Application-level resource pressure (Apache worker processes, connection handling) rather than pure bandwidth exhaustion. Service state was verified independently with `netstat -antp | grep 80` before, during, and after testing.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/05-http-dos.png" alt="HTTP Flood DoS" width="850">
+  <img src="images/08-http-dos.png" alt="HTTP Flood DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 05. Single-source HTTP flood showing a high rate of HTTP GET requests sent to the target web server.</em>
+  <em>Figure 08. Single-source HTTP flood showing a high rate of HTTP GET requests sent to the target web server.</em>
 </p>
 
 <p align="center">
-  <img src="images/04-http-headers.png" alt="HTTP Request Headers" width="850">
+  <img src="images/09-http-headers.png" alt="HTTP Request Headers" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 04. HTTP request headers captured during the application-layer flood analysis.</em>
+  <em>Figure 09. HTTP request headers captured during the application-layer flood analysis.</em>
 </p>
 
 <p align="center">
-  <img src="images/11-http-ddos_Script.png" alt="HTTP DDoS Script Execution" width="850">
+  <img src="images/10-http-ddos-script.png" alt="HTTP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 11. HTTP flood automation script launching multiple concurrent request generators.</em>
+  <em>Figure 10. HTTP flood automation script launching multiple concurrent request generators.</em>
 </p>
 
 <p align="center">
-  <img src="images/12-http-ddos.png" alt="HTTP Flood Simulated DDoS" width="850">
+  <img src="images/11-http-ddos.png" alt="HTTP Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 12. Simulated HTTP flood generating a substantially higher request rate against the Apache2 service.</em>
+  <em>Figure 11. Simulated HTTP flood generating a substantially higher request rate against the Apache2 service.</em>
 </p>
 
 **Key Findings** Layer 7 floods are the hardest attack type to distinguish from real users at the network layer alone; request-rate anomalies and connection concurrency were the clearest signals observed in this lab, rather than packet-level structure.
@@ -360,34 +369,34 @@ sequenceDiagram
 
 ### TCP Flood
 
-**Overview** A generic TCP-layer flood using crafted payload data (`TCP_Data-Flood.py`) to saturate the connection handling capacity of the target beyond a simple SYN flood, by establishing and holding connections with data payloads.
+**Overview** A generic TCP-layer flood using crafted payload data (`00-tcp-data-flood.py`) to saturate the connection handling capacity of the target beyond a simple SYN flood, by establishing and holding connections with data payloads.
 
 **Attack Workflow** The attacker opens TCP connections to the target and sends flood-rate payload data, consuming both connection slots and processing time on the victim.
 
 **Impact** Combined bandwidth and connection-table pressure on the victim, more resource-intensive to generate than a pure SYN flood but harder for the victim to distinguish from legitimate data transfer at first glance.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/15-TCP-dos.png" alt="TCP Flood DoS" width="850">
+  <img src="images/12-tcp-dos.png" alt="TCP Flood DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 15. Single-source TCP flood transmitting continuous payload data to the target.</em>
+  <em>Figure 12. Single-source TCP flood transmitting continuous payload data to the target.</em>
 </p>
 
 <p align="center">
-  <img src="images/16-TCP-ddos_Script.png" alt="TCP DDoS Script Execution" width="850">
+  <img src="images/13-tcp-ddos-script.png" alt="TCP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 16. Execution of the TCP flood simulation script across multiple concurrent processes.</em>
+  <em>Figure 13. Execution of the TCP flood simulation script across multiple concurrent processes.</em>
 </p>
 
 <p align="center">
-  <img src="images/17-TCP-ddos.png" alt="TCP Flood Simulated DDoS" width="850">
+  <img src="images/14-tcp-ddos.png" alt="TCP Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 17. Simulated TCP flood demonstrating increased connection volume and payload throughput.</em>
+  <em>Figure 14. Simulated TCP flood demonstrating increased connection volume and payload throughput.</em>
 </p>
 
 **Key Findings** TCP floods that include payload data are more resource-intensive to generate but produce traffic that looks closer to legitimate data transfer than SYN-only floods, making them slightly harder to triage from packet headers alone.
@@ -403,27 +412,27 @@ sequenceDiagram
 **Impact** Metasploitable2 accepted the oversized ICMP traffic without crashing. Packet captures showed that malformed fragments were discarded by the network stack, demonstrating resistance to the historical Ping of Death attack.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/07-pod-dos.png" alt="Ping of Death DoS" width="850">
+  <img src="images/15-pod-dos.png" alt="Ping of Death DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 07. Oversized ICMP packets generated during the Ping of Death demonstration.</em>
+  <em>Figure 15. Oversized ICMP packets generated during the Ping of Death demonstration.</em>
 </p>
 
 <p align="center">
-  <img src="images/13-pod-ddos_Script.png" alt="Ping of Death DDoS Script Execution" width="850">
+  <img src="images/16-pod-ddos-script.png" alt="Ping of Death DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 13. Execution of the Ping of Death simulation script using multiple concurrent processes.</em>
+  <em>Figure 16. Execution of the Ping of Death simulation script using multiple concurrent processes.</em>
 </p>
 
 <p align="center">
-  <img src="images/14-pod-ddos.png" alt="Ping of Death Simulated DDoS" width="850">
+  <img src="images/17-pod-ddos.png" alt="Ping of Death Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 14. Simulated multi-process Ping of Death traffic captured in Wireshark.</em>
+  <em>Figure 17. Simulated multi-process Ping of Death traffic captured in Wireshark.</em>
 </p>
 
 **Key Findings** This attack is largely a historical case study against fully patched modern kernels, but remains a useful test against older or specifically vulnerable targets like Metasploitable2, which is intentionally left unpatched for training purposes.
@@ -433,7 +442,7 @@ Observed that Metasploitable2 dropped the malformed fragments due to modern kern
 
 ## 8. Simulated DDoS Stage
 
-Each attack type above was re-run using its corresponding `*-ddos_Script.sh`, which opens several `tmux` panes and launches one flood process per pane against the same target simultaneously. This approximates the traffic _volume_ of a distributed attack while originating from a single source IP — a meaningful distinction from a genuine multi-host DDoS, and one worth stating clearly in a graduation project defense.
+Each attack type above was re-run using its corresponding `*-ddos-script.sh`, which opens several `tmux` panes and launches one flood process per pane against the same target simultaneously. This approximates the traffic _volume_ of a distributed attack while originating from a single source IP — a meaningful distinction from a genuine multi-host DDoS, and one worth stating clearly in a graduation project defense.
 
 Each DDoS-stage script was terminated cleanly after capture with `tmux kill-session -t ddos_simulation` (or `tmux kill-server` where multiple sessions were used), before moving to the next attack type, to avoid cross-contaminating captures between stages.
 
@@ -444,7 +453,7 @@ Each DDoS-stage script was terminated cleanly after capture with `tmux kill-sess
 As a final demonstration, multiple attack types were run in combination against Metasploitable2 to observe cumulative impact on service availability.
 
 <p align="center">
-  <img src="images/18-Death-of-Metasploit.png" alt="Combined Attack Service Outage" width="850">
+  <img src="images/18-combined-attack.png" alt="Combined Attack Service Outage" width="850">
 </p>
 
 <p align="center">
@@ -479,18 +488,12 @@ During the combined attack, the Apache2 service became completely unresponsive w
 Every stage was saved to a dedicated `.pcapng` file so the traffic can be independently re-analyzed:
 
 ```text
-pcaps/
-├── 00-baseline.pcapng
-├── 01-icmp-dos.pcapng
-├── 02-syn-dos.pcapng
-├── 03-http-dos.pcapng
-├── 04-pod-dos.pcapng
-├── 05-icmp-ddos.pcapng
-├── 06-syn-ddos.pcapng
-├── 07-http-ddos.pcapng
-├── 08-pod-ddos.pcapng
-├── 09-TCP-dos.pcapng
-└── 10-TCP-ddos.pcapng
+Packet capture files
+
+00-baseline.pcapng
+01-icmp-dos.pcapng
+       •••
+10-tcp-ddos.pcapng
 ```
 
 ---
@@ -572,22 +575,22 @@ For internet-facing production services, routing traffic through a cloud defense
 |00|`00-topology.png`|Lab Topology|
 |01|`01-baseline.png`|Baseline Traffic Capture|
 |02|`02-icmp-dos.png`|ICMP Flood — Single Source|
-|03|`03-syn-dos.png`|SYN Flood — Single Source|
-|05|`05-http-headers.png`|Captured HTTP Headers|
-|06|`06-http-dos.png`|HTTP Flood — Single Source|
-|07|`07-icmp-ddos_Script.png`|ICMP DDoS Script Execution|
-|08|`08-pod-dos.png`|Ping of Death — Single Source|
-|09|`09-icmp-ddos.png`|ICMP Flood — Simulated Multi-Source|
-|10|`10-syn-ddos.png`|SYN Flood — Simulated Multi-Source|
-|11|`11-syn-ddos_Script.png`|SYN DDoS Script Execution|
-|12|`12-http-ddos_Script.png`|HTTP DDoS Script Execution|
-|13|`13-http-ddos.png`|HTTP Flood — Simulated Multi-Source|
-|14|`14-pod-ddos_Script.png`|Ping of Death DDoS Script Execution|
-|15|`15-pod-ddos.png`|Ping of Death — Simulated Multi-Source|
-|16|`16-TCP-dos.png`|TCP Flood — Single Source|
-|17|`17-TCP-ddos_Script.png`|TCP DDoS Script Execution|
-|18|`18-TCP-ddos.png`|TCP Flood — Simulated Multi-Source|
-|19|`19-Death-of-Metasploit.png`|Combined Attack — Service Outage|
+|03|`03-icmp-ddos-script.png`|ICMP DDoS Script Execution|
+|04|`04-icmp-ddos.png`|ICMP Flood — Simulated Multi-Source|
+|05|`05-syn-dos.png`|SYN Flood — Single Source|
+|06|`06-syn-ddos-script.png`|SYN DDoS Script Execution|
+|07|`07-syn-ddos.png`|SYN Flood — Simulated Multi-Source|
+|08|`08-http-dos.png`|HTTP Flood — Single Source|
+|09|`09-http-headers.png`|Captured HTTP Headers|
+|10|`10-http-ddos-script.png`|HTTP DDoS Script Execution|
+|11|`11-http-ddos.png`|HTTP Flood — Simulated Multi-Source|
+|12|`12-tcp-dos.png`|TCP Flood — Single Source|
+|13|`13-tcp-ddos-script.png`|TCP DDoS Script Execution|
+|14|`14-tcp-ddos.png`|TCP Flood — Simulated Multi-Source|
+|15|`15-pod-dos.png`|Ping of Death — Single Source|
+|16|`16-pod-ddos-script.png`|Ping of Death DDoS Script Execution|
+|17|`17-pod-ddos.png`|Ping of Death — Simulated Multi-Source|
+|18|`18-combined-attack.png`|Combined Attack — Service Outage|
 
 ---
 
@@ -611,8 +614,8 @@ For internet-facing production services, routing traffic through a cloud defense
 |`06-syn-ddos.pcapng`|SYN Flood — simulated multi-source|
 |`07-http-ddos.pcapng`|HTTP Flood — simulated multi-source|
 |`08-pod-ddos.pcapng`|Ping of Death — simulated multi-source|
-|`09-TCP-dos.pcapng`|TCP Flood — single source|
-|`10-TCP-ddos.pcapng`|TCP Flood — simulated multi-source|
+|`09-tcp-dos.pcapng`|TCP Flood — single source|
+|`10-tcp-ddos.pcapng`|TCP Flood — simulated multi-source|
 
 ---
 
@@ -632,6 +635,9 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 - [Metasploitable2 Documentation](https://docs.rapid7.com/metasploit/metasploitable-2-exploitability-guide/)
 - [hping3 Manual (`man hping3`)](https://linux.die.net/man/8/hping3)
 - [How to Perform a DDoS Attack Using Kali Linux | Educational Tutorial](https://youtu.be/mGAd_bOri18?si=hn5R2VOMuFT4JIt8)
+
+### Additional Learning Resources
+
 - [DDoS Attack Explained | How to Perform DOS Attack | Ethical Hacking and Penetration Testing](https://youtu.be/04M8X-im3ac?si=e8yiqXIU-xPyy2nE)
 - [How to Install Metasploitable on New VMware Workstation](https://youtu.be/OO7BPfi3DbU?si=OQJc4CRLsBHsmi2X)
 - [i bought a DDoS attack on the DARK WEB (don't do this)](https://youtu.be/eZYtnzODpW4?si=GXrN3MXsielkWkGg)
