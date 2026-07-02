@@ -508,6 +508,7 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 
 - [OWASP Testing Guide — Denial of Service Methodology](https://owasp.org/www-community/attacks/Denial_of_Service)
 - [Cloudflare Learning Center — Layer 7 vs Layer 4 Mitigation](https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/)
+- [CISA & MS-ISAC Joint Guide — Understanding and Responding to DDoS Attacks](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)
 - [Imperva Distributed Denial of Service (DDoS)](https://www.imperva.com/learn/ddos/denial-of-service/)
 - [Wireshark Documentation](https://www.wireshark.org/docs/)
 - [Metasploitable2 Documentation](https://docs.rapid7.com/metasploit/metasploitable-2-exploitability-guide/)
