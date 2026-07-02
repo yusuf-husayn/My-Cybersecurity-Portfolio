@@ -32,14 +32,15 @@ Document, in full technical detail, a hands-on DoS/DDoS lab built entirely with 
 ## Repo Structure
 
 ```text
-DoS-DDoS-Lab/
+dos-ddos-lab/
 ├── README.md
-├── MIT LICENSE
+├── LICENSE
 ├── .gitignore
 ├── images/
-├── pcaps/
 ├── scripts/
-│   └── Scripts For DDoS/
+└── scripts/
+    ├── bash/
+    └── python/
 ```
 
 ---
@@ -481,6 +482,7 @@ For internet-facing production services, routing traffic through a cloud defense
 ## 17. Packet Capture Index
 
 > **📥 Download Raw PCAP Files:** Due to GitHub's file size limits (files exceed 2.7 GB), the raw packet captures for all lab stages have been hosted externally. You can view and download them here: https://drive.google.com/drive/folders/1-iTdr49YMJAuqd9PS4xHblitj7w09v_2?usp=sharing
+> Raw packet captures are hosted on Google Drive because the complete capture set exceeds GitHub's practical repository size.
 
 |File|Stage|
 |---|---|
