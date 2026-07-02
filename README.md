@@ -634,10 +634,10 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 - [Wireshark Documentation](https://www.wireshark.org/docs/)
 - [Metasploitable2 Documentation](https://docs.rapid7.com/metasploit/metasploitable-2-exploitability-guide/)
 - [hping3 Manual (`man hping3`)](https://linux.die.net/man/8/hping3)
-- [How to Perform a DDoS Attack Using Kali Linux | Educational Tutorial](https://youtu.be/mGAd_bOri18?si=hn5R2VOMuFT4JIt8)
 
 ### Additional Learning Resources
 
+- [How to Perform a DDoS Attack Using Kali Linux | Educational Tutorial](https://youtu.be/mGAd_bOri18?si=hn5R2VOMuFT4JIt8)
 - [DDoS Attack Explained | How to Perform DOS Attack | Ethical Hacking and Penetration Testing](https://youtu.be/04M8X-im3ac?si=e8yiqXIU-xPyy2nE)
 - [How to Install Metasploitable on New VMware Workstation](https://youtu.be/OO7BPfi3DbU?si=OQJc4CRLsBHsmi2X)
 - [i bought a DDoS attack on the DARK WEB (don't do this)](https://youtu.be/eZYtnzODpW4?si=GXrN3MXsielkWkGg)
