@@ -243,7 +243,7 @@ sequenceDiagram
 </p>
 
 <p align="center">
-  <img src="images/07-icmp-ddos-script.png" alt="ICMP DDoS Script Execution" width="850">
+  <img src="images/06-icmp-ddos_Script.png" alt="ICMP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
@@ -295,19 +295,19 @@ sequenceDiagram
 </p>
 
 <p align="center">
-  <img src="images/09-syn-ddos-script.png" alt="SYN DDoS Script Execution" width="850">
+  <img src="images/10-syn-ddos_Script.png" alt="SYN DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 09. Execution of the SYN flood simulation script across multiple concurrent processes.</em>
+  <em>Figure 10. Execution of the SYN flood simulation script across multiple concurrent processes.</em>
 </p>
 
 <p align="center">
-  <img src="images/10-syn-ddos.png" alt="SYN Flood Simulated DDoS" width="850">
+  <img src="images/09-syn-ddos.png" alt="SYN Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 10. Simulated SYN flood demonstrating an increased number of half-open TCP connections.</em>
+  <em>Figure 09. Simulated SYN flood demonstrating an increased number of half-open TCP connections.</em>
 </p>
 
 **Key Findings** SYN floods are identifiable by the SYN/ACK asymmetry in the filtered capture and by the growing number of half-open connections over the attack window.
@@ -323,23 +323,23 @@ sequenceDiagram
 **Impact** Application-level resource pressure (Apache worker processes, connection handling) rather than pure bandwidth exhaustion. Service state was verified independently with `netstat -antp | grep 80` before, during, and after testing.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/06-http-dos.png" alt="HTTP Flood DoS" width="850">
+  <img src="images/05-http-dos.png" alt="HTTP Flood DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 06. Single-source HTTP flood showing a high rate of HTTP GET requests sent to the target web server.</em>
+  <em>Figure 05. Single-source HTTP flood showing a high rate of HTTP GET requests sent to the target web server.</em>
 </p>
 
 <p align="center">
-  <img src="images/05-http-headers.png" alt="HTTP Request Headers" width="850">
+  <img src="images/04-http-headers.png" alt="HTTP Request Headers" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 05. HTTP request headers captured during the application-layer flood analysis.</em>
+  <em>Figure 04. HTTP request headers captured during the application-layer flood analysis.</em>
 </p>
 
 <p align="center">
-  <img src="images/11-http-ddos-script.png" alt="HTTP DDoS Script Execution" width="850">
+  <img src="images/11-http-ddos_Script.png" alt="HTTP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
@@ -367,7 +367,7 @@ sequenceDiagram
 **Impact** Combined bandwidth and connection-table pressure on the victim, more resource-intensive to generate than a pure SYN flood but harder for the victim to distinguish from legitimate data transfer at first glance.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/15-tcp-dos.png" alt="TCP Flood DoS" width="850">
+  <img src="images/15-TCP-dos.png" alt="TCP Flood DoS" width="850">
 </p>
 
 <p align="center">
@@ -375,7 +375,7 @@ sequenceDiagram
 </p>
 
 <p align="center">
-  <img src="images/16-tcp-ddos-script.png" alt="TCP DDoS Script Execution" width="850">
+  <img src="images/16-TCP-ddos_Script.png" alt="TCP DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
@@ -383,7 +383,7 @@ sequenceDiagram
 </p>
 
 <p align="center">
-  <img src="images/17-tcp-ddos.png" alt="TCP Flood Simulated DDoS" width="850">
+  <img src="images/17-TCP-ddos.png" alt="TCP Flood Simulated DDoS" width="850">
 </p>
 
 <p align="center">
@@ -403,15 +403,15 @@ sequenceDiagram
 **Impact** Metasploitable2 accepted the oversized ICMP traffic without crashing. Packet captures showed that malformed fragments were discarded by the network stack, demonstrating resistance to the historical Ping of Death attack.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/04-pod-dos.png" alt="Ping of Death DoS" width="850">
+  <img src="images/07-pod-dos.png" alt="Ping of Death DoS" width="850">
 </p>
 
 <p align="center">
-  <em>Figure 04. Oversized ICMP packets generated during the Ping of Death demonstration.</em>
+  <em>Figure 07. Oversized ICMP packets generated during the Ping of Death demonstration.</em>
 </p>
 
 <p align="center">
-  <img src="images/13-pod-ddos-script.png" alt="Ping of Death DDoS Script Execution" width="850">
+  <img src="images/13-pod-ddos_Script.png" alt="Ping of Death DDoS Script Execution" width="850">
 </p>
 
 <p align="center">
@@ -444,7 +444,7 @@ Each DDoS-stage script was terminated cleanly after capture with `tmux kill-sess
 As a final demonstration, multiple attack types were run in combination against Metasploitable2 to observe cumulative impact on service availability.
 
 <p align="center">
-  <img src="images/18-service-outage.png" alt="Combined Attack Service Outage" width="850">
+  <img src="images/18-Death-of-Metasploit.png" alt="Combined Attack Service Outage" width="850">
 </p>
 
 <p align="center">
