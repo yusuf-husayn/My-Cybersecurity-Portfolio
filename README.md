@@ -29,7 +29,7 @@ Document, in full technical detail, a hands-on DoS/DDoS lab built entirely with 
 
 ---
 
-## Folder Structure
+## Repo Structure
 
 ```text
 DoS-DDoS-Lab/
