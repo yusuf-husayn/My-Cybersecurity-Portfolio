@@ -303,7 +303,7 @@ sequenceDiagram
 **Impact** Exhaustion of the server's connection queue, which can block or slow new legitimate connections.
 
 **Wireshark Analysis** <p align="center">
-  <img src="images/05-syn-dos.png" alt="SYN Flood DoS" width="850">
+  <img src="images/05-syn-flood.png" alt="SYN Flood DoS" width="850">
 </p>
 
 <p align="center">
@@ -461,19 +461,20 @@ Each DDoS-stage script was terminated cleanly after capture with `tmux kill-sess
   <em>Figure 18. Multiple concurrent <code>hping3</code> processes executing in parallel during the simulated DDoS stage. The Apache web service became temporarily unavailable, resulting in a browser connection timeout while the target operating system remained operational.</em>
 </p>
 
+<p align="center">
+  <img src="images/19-ddos-service-unavailable.png" alt="Service Unavailable During Simulated DDoS" width="900">
+</p>
+
+<p align="center">
+  <em>Figure 19. During the simulated DDoS stage, the target became temporarily unreachable. ICMP echo requests resulted in 100% packet loss, while the Apache web service returned an "Unable to connect" error, demonstrating successful service disruption without crashing the target operating system.</em>
+</p>
+
 ---
 
 ## 9. Combined Attack — Service Outage
 
 As a final demonstration, multiple attack types were run in combination against Metasploitable2 to observe cumulative impact on service availability.
 
-<p align="center">
-  <img src="images/19-combined-attack.png" alt="Combined Attack Service Outage" width="850">
-</p>
-
-<p align="center">
-  <em>Figure 19. Combined attack scenario resulting in degraded Apache2 service availability on the target system.</em>
-</p>
 
 During the combined attack, the Apache2 service became temporarily unavailable to legitimate clients within seconds. Recovery was achieved by terminating the flood processes, with service restoration confirmed using `netstat`.
 
@@ -594,7 +595,7 @@ For internet-facing production services, routing traffic through a cloud defense
 |02|`02-icmp-dos.png`|ICMP Flood — Single Source|
 |03|`03-icmp-ddos-script.png`|ICMP DDoS Script Execution|
 |04|`04-icmp-ddos.png`|ICMP Flood — Simulated Multi-Source|
-|05|`05-syn-dos.png`|SYN Flood — Single Source|
+|05|`05-syn-flood.png`|SYN Flood — Single Source|
 |06|`06-syn-ddos-script.png`|SYN DDoS Script Execution|
 |07|`07-syn-ddos.png`|SYN Flood — Simulated Multi-Source|
 |08|`08-http-dos.png`|HTTP Flood — Single Source|
@@ -607,9 +608,8 @@ For internet-facing production services, routing traffic through a cloud defense
 |15|`15-pod-dos.png`|Ping of Death — Single Source|
 |16|`16-pod-ddos-script.png`|Ping of Death DDoS Script Execution|
 |17|`17-pod-ddos.png`|Ping of Death — Simulated Multi-Source|
-|18| `18-simulated-ddos-service-timeout.png`| Simulated DDoS — Browser Timeout During Concurrent Attack|
-|19|`19-combined-attack.png`|Combined Attack — Service Outage|
-
+|18|`18-simulated-ddos-service-timeout.png`| Simulated DDoS — Browser Timeout During Concurrent Attack|
+|19|`19-ddos-service-unavailable.png`|Simulated DDoS – 100% Packet Loss and Service Unavailability|
 
 
 ---
