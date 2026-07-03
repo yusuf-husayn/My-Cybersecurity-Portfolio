@@ -2,7 +2,7 @@
 
 Traffic Analysis • Wireshark • hping3 • Bash & Python Automation • TCP/IP
 
-![Platform](https://img.shields.io/badge/Platform-Linux-blue) ![Wireshark](https://img.shields.io/badge/Wireshark-Traffic%20Analysis-blue) ![hping3](https://img.shields.io/badge/hping3-Traffic%20Generation-orange) ![License](https://img.shields.io/badge/License-MIT-green) ![GitHub](https://img.shields.io/badge/GitHub-Portfolio-black?logo=github) ![VMware](https://img.shields.io/badge/VMware-Lab-blue?logo=vmware) ![Python](https://img.shields.io/badge/Python-3-blue?logo=python) ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![GitHub](https://img.shields.io/badge/GitHub-Portfolio-black?logo=github) ![Platform](https://img.shields.io/badge/Platform-Linux-blue) ![Wireshark](https://img.shields.io/badge/Wireshark-Traffic%20Analysis-blue) ![hping3](https://img.shields.io/badge/hping3-Traffic%20Generation-orange) ![License](https://img.shields.io/badge/License-MIT-green) ![VMware](https://img.shields.io/badge/VMware-Lab-blue?logo=vmware) ![Python](https://img.shields.io/badge/Python-3-blue?logo=python) ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
  
 ---
 ## Information
@@ -59,18 +59,17 @@ dos-ddos-lab/
     - TCP Flood
     - Ping of Death
 8. Simulated DDoS Stage
-9. Combined Attack — Service Outage
-10. Traffic Analysis (Wireshark)
-11. Mitigation Techniques
-12. Attack Summary
-13. Lessons Learned
-14. Future Improvements
-15. Skills Demonstrated
-16. Screenshots Index
-17. Packet Capture Index
-18. Lab Limitations
-19. Conclusion
-20. References
+9. Traffic Analysis (Wireshark)
+10. Mitigation Techniques
+11. Attack Summary
+12. Lessons Learned
+13. Future Improvements
+14. Skills Demonstrated
+15. Screenshots Index
+16. Packet Capture Index
+17. Lab Limitations
+18. Conclusion
+19. References
 
 ---
 
@@ -471,16 +470,7 @@ Each DDoS-stage script was terminated cleanly after capture with `tmux kill-sess
 
 ---
 
-## 9. Combined Attack — Service Outage
-
-As a final demonstration, multiple attack types were run in combination against Metasploitable2 to observe cumulative impact on service availability.
-
-
-During the combined attack, the Apache2 service became temporarily unavailable to legitimate clients within seconds. Recovery was achieved by terminating the flood processes, with service restoration confirmed using `netstat`.
-
----
-
-## 10. Traffic Analysis (Wireshark)
+## 9. Traffic Analysis (Wireshark)
 
 ### Filters Used
 
@@ -509,13 +499,15 @@ Packet capture files
 
 00-baseline.pcapng
 01-icmp-dos.pcapng
+02-syn-dos.pcapng
+03-http-dos.pcapng
        •••
 10-tcp-ddos.pcapng
 ```
 
 ---
 
-## 11. Mitigation Techniques
+## 10. Mitigation Techniques
 
 ### Service-Level Defense (Apache2 / Metasploitable-style targets)
 
@@ -539,7 +531,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 12. Attack Summary
+## 11. Attack Summary
 
 |Attack|Layer|Target|Effect|
 |---|---|---|---|
@@ -551,7 +543,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 13. Lessons Learned
+## 12. Lessons Learned
 
 - TCP handshakes are inherently vulnerable to resource exhaustion without SYN-cookie style protection.
 - ICMP and SYN floods are easy to identify in packet captures via simple filters; HTTP floods are not.
@@ -561,7 +553,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 14. Future Improvements
+## 13. Future Improvements
 
 - Repeat the DDoS stage using genuinely separate attacking VMs/hosts instead of a single-host simulation, to compare traffic signatures against distributed source IPs.
 - Deploy `mod_evasive` or a WAF in front of Metasploitable2 and re-run the HTTP flood to measure mitigation effectiveness quantitatively.
@@ -572,7 +564,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 15. Skills Demonstrated
+## 14. Skills Demonstrated
 
 - Network Traffic Analysis
 - Wireshark Packet Inspection & Filtering
@@ -586,7 +578,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 16. Screenshots Index
+## 15. Screenshots Index
 
 |#|File|Description|
 |---|---|---|
@@ -614,7 +606,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 17. Packet Capture Index
+## 16. Packet Capture Index
 
 > [!NOTE]
 > The raw packet capture files generated during this project are not stored in this repository because the complete capture set exceeds GitHub's practical repository size limits.
@@ -639,7 +631,7 @@ For internet-facing production services, routing traffic through a cloud defense
 
 ---
 
-## 18. Lab Limitations
+## 17. Lab Limitations
 
 This laboratory simulated DoS and DDoS behavior within an isolated VMware environment.
 
@@ -651,13 +643,13 @@ This behavior accurately reflects the objective of DoS/DDoS testing in a control
 
 The objective of the laboratory was to analyze attack behavior, traffic characteristics, and defensive techniques rather than reproduce Internet-scale DDoS attacks.
 
-## 19. Conclusion
+## 18. Conclusion
 
 This project built a complete, self-contained DoS/DDoS lab using only Kali Linux and Metasploitable2, covering five distinct attack primitives — ICMP flood, SYN flood, HTTP flood, TCP flood, and Ping of Death — each tested first as a single-source DoS and then as a locally simulated multi-process DDoS via `tmux`. Every stage was captured independently in Wireshark and compared against a clean baseline, allowing clear identification of each attack's traffic signature at Layer 3, 4, and 7. A combined-attack stage demonstrated cumulative impact on service availability. The project closes with a concrete, honest limitation — the DDoS stage simulates volume rather than true source distribution — and a set of practical next steps (multi-host testing, WAF deployment, IDS signature evaluation) to extend the work further.
 
 ---
 
-## 20. References
+## 19. References
 
 - [OWASP Testing Guide — Denial of Service Methodology](https://owasp.org/www-community/attacks/Denial_of_Service)
 - [CISA & MS-ISAC Joint Guide — Understanding and Responding to DDoS Attacks](https://www.cisa.gov/resources-tools/resources/understanding-and-responding-distributed-denial-service-attacks)
@@ -674,4 +666,4 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 - [How to Install Metasploitable on New VMware Workstation](https://youtu.be/OO7BPfi3DbU?si=OQJc4CRLsBHsmi2X)
 - [i bought a DDoS attack on the DARK WEB (don't do this)](https://youtu.be/eZYtnzODpW4?si=GXrN3MXsielkWkGg)
 
-**If you found this project useful, feel free to star the repository.**
+**If you found this project useful, consider starring the repository.**
