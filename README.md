@@ -662,4 +662,4 @@ This project built a complete, self-contained DoS/DDoS lab using only Kali Linux
 - [How to Install Metasploitable on New VMware Workstation](https://youtu.be/OO7BPfi3DbU?si=OQJc4CRLsBHsmi2X)
 - [i bought a DDoS attack on the DARK WEB (don't do this)](https://youtu.be/eZYtnzODpW4?si=GXrN3MXsielkWkGg)
 
-If you found this project useful, feel free to star the repository.
+**If you found this project useful, feel free to star the repository.**
